@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.name          = "libretto"
   spec.version       = Libretto::VERSION
   spec.authors       = ["Tom Gagnier"]
-  spec.email         = ["tgagnier@lancope.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.email         = ["tgagnier@gmail.com"]
+  spec.summary       = %q{Scripting}
+  spec.description   = %q{Collection of useful bash and ruby scripts.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
