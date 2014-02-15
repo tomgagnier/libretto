@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'pathname'
+require 'tmpdir'
+
+USAGE = <<-EOF
+cat-jar-entry jar-entry jar...
+
+Concatenate the contents of the specified jar entry to standard out.
+EOF
+
+begin
+  if ARGV.size < 2
+    raise 'Insufficient number of arguments'
+  end
+
+  jar_entry = ARGV.shift
+  jars = ARGV.map { |argument| Pathname argument }
+
+  jars.each do |jar|
+    Dir.mktmpdir do |temporary_directory|
+      FileUtils.cp jar, temporary_directory
+      Dir.chdir(temporary_directory) do
+        %x(jar xf #{jar.basename} #{jar_entry})
+        FileUtils.rm jar.basename
+        matches = Dir['**/*'].select { |entry| File.file?(entry) }
+        puts "#{jar}: No matches for #{jar_entry}" if matches.empty?
+        matches.each do |entry|
+          puts "#{jar}: #{entry}"
+          IO.foreach(entry) { |line| puts "  #{line}" }
+        end
+      end
+    end
+  end
+
+rescue RuntimeError => error
+  abort "#{error.msg}\n\n#{USAGE}"
+end
+

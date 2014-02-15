@@ -1,0 +1,2 @@
+#!/bin/bash
+cat-jar-entry META-INF/MANIFEST.MF $@

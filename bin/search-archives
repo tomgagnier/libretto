@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+USAGE <<-EOF
+  find-java-archive-entries <root-directory> <jar-entry-pattern>
+EOF
+
+begin
+
+  if ARGV.size < 2
+    raise 'Insufficient number of arguments.'
+  end
+
+  root_directory = ARGV[0]
+  jar_entry_pattern = Regexp.new ARGV[1]
+
+  Dir.glob("#{root_directory}/**/*.[ejw]ar") do |jar_file|
+    next if File.directory?(jar_file)
+    jar_entries = %x(jar -tf #{jar_file}).split("\n")
+    jar_entries.each do |jarEntry|
+      if jar_entry_pattern.match(jarEntry)
+        $stdout.puts "#{jar_file}: #{jarEntry}"
+      end
+    end
+  end
+
+rescue RuntimeError => error
+  abort "#{error.message}\n\n#{USAGE}"
+end
