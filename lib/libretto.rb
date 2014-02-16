@@ -1,5 +1,1 @@
-require "libretto/version"
-
-module Libretto
-  # Your code goes here...
-end
+require_relative 'libretto/version'
